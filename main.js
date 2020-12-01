@@ -72,5 +72,55 @@ app.post("/register/", (req, res, next) => {
     }
   });
 });
+app.post("/login/", (req, res, next) => {
+  var data = req.body;
+  var email = data.email;
+  var password = data.password;
+
+  con.query("SELECT * FROM user where email = ?", [email], function (
+    err,
+    result,
+    fields
+  ) {
+    con.on("error", (err) => {
+      console.log("[MySQL ERROR]", err);
+    });
+
+    if (result && result.length) {
+      if (password == result[0].password) {
+        res.json(["Valid user"]);
+      } else {
+        res.json("Invalid user");
+      }
+    }
+  });
+});
+
+
+app.post("/feedback/", (req, res, next) => {
+  var sqldata = req.body;
+  var pname = sqldata.pname;
+  var pfeedback = sqldata.pfeedback;
+
+
+
+      var sql = "INSERT INTO feedback (pname,pfeedback) VALUES (?,?)";
+      var values = [pname, pfeedback];
+
+      console.log(sql, values);
+
+      con.query(sql, values, function (err, result, fields) {
+        con.on("error", (err) => {
+          console.log("[MySQL ERROR]", err);
+        });
+        res.json("Feedback Submited Successfully");
+        console.log("Submited" + sqldata);
+      });
+    
+  });
+
+
+
+
 
 
