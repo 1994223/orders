@@ -24,7 +24,7 @@ con.connect(function(err) {
     http.createServer( (req, res) => {
         res.write("hello world"); //write a response to the client
         res.end(); //end the response
-      }).listen(3000, "192.168.68.105");
+      }).listen(3000, "192.168.146.1");
   });
   
 });
