@@ -1,4 +1,4 @@
-var mysql = require("mysql");
+\var mysql = require("mysql");
 var express = require("express");
 var bodyParser = require("body-parser");
 const http = require('http');
@@ -24,7 +24,7 @@ con.connect(function(err) {
     http.createServer( (req, res) => {
         res.write("hello world"); //write a response to the client
         res.end(); //end the response
-      }).listen(3000, "192.168.146.1");
+      }).listen(3000, "192.168.0.129");
   });
   
 });
@@ -72,6 +72,7 @@ app.post("/register/", (req, res, next) => {
     }
   });
 });
+
 app.post("/login/", (req, res, next) => {
   var data = req.body;
   var email = data.email;
@@ -118,9 +119,27 @@ app.post("/feedback/", (req, res, next) => {
       });
     
   });
+  app.post("/orders/", (req, res, next) => {
+    var sqldata = req.body;
+    var odertitle= sqldata.odertitle;
+    var description = sqldata.description;
+    var price= sqldata.price;
+    var quantity = sqldata.quantity;
+    var category = sqldata.category;
+  
+    var sql = "INSERT INTO orders (odertitle, description, price,quantity,category) VALUES (?,?,?,?,?)";
+      var values = [odertitle,description,price,quantity,category];
 
+      console.log(sql, values);
 
-
-
+      con.query(sql, values, function (err, result, fields) {
+        con.on("error", (err) => {
+          console.log("[MySQL ERROR]", err);
+        });
+        res.json("order added Successfully");
+        console.log("Submited" + sqldata);
+      });
+  });
+  
 
 
